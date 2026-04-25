@@ -21,10 +21,12 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 .screen{min-height:100vh;padding:32px 20px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
 
 /* ── 第1屏：标题 + 利率对比 ── */
-.screen1{background:linear-gradient(180deg,#C41E24 0%,#A0181E 40%,#FFFBF5 40%)}
+.screen1{background:linear-gradient(180deg,#0D1B3E 0%,#152350 18%,#1B2D5E 28%,#FFFBF5 58%);position:relative}
+.screen1::before{content:'';position:absolute;top:0;left:0;right:0;height:55%;background-image:radial-gradient(circle,rgba(212,168,67,0.12) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
+.screen1::after{content:'';position:absolute;top:10%;left:5%;width:90%;height:1px;background:linear-gradient(90deg,transparent,rgba(212,168,67,0.3),transparent);pointer-events:none}
 .s1-header{text-align:center;padding-bottom:32px}
-.s1-header h1{font-size:32px;color:#FFF;font-weight:900;letter-spacing:2px;margin-bottom:8px}
-.s1-header p{font-size:15px;color:rgba(255,255,255,0.85)}
+.s1-header h1{font-size:32px;color:#FFF;font-weight:900;letter-spacing:2px;margin-bottom:8px;text-shadow:0 2px 12px rgba(0,0,0,0.3)}
+.s1-header p{font-size:15px;color:rgba(212,168,67,0.9);letter-spacing:1px}
 
 .rate-cards{display:flex;gap:12px}
 .rate-card{flex:1;background:var(--card);border-radius:16px;padding:20px 16px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.08);position:relative}
@@ -40,7 +42,7 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 .diff-tag .more{font-size:28px;font-weight:900;color:var(--red)}
 .diff-tag .desc{font-size:13px;color:var(--text)}
 
-.scroll-hint{text-align:center;margin-top:24px;color:#FFF;font-size:12px;animation:bounce 1.5s infinite}
+.scroll-hint{text-align:center;margin-top:24px;color:rgba(255,255,255,0.5);font-size:12px;animation:bounce 1.5s infinite}
 @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
 
 /* ── 第2屏：收益计算器 ── */
@@ -81,8 +83,11 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 .issue-card .next-date{font-size:36px;font-weight:900;color:var(--red)}
 .issue-card .next-label{font-size:13px;color:var(--sub);margin-bottom:6px}
 .issue-card .next-type{font-size:14px;color:var(--text);margin-top:4px}
-.bank-list{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:20px}
+.bank-section{margin-bottom:14px;text-align:center}
+.bank-label{display:inline-block;font-size:11px;color:var(--gold);font-weight:600;margin-bottom:6px;padding:2px 12px;border:1px solid var(--gold);border-radius:10px;letter-spacing:1px}
+.bank-list{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:4px}
 .bank-tag{background:var(--card);padding:8px 14px;border-radius:20px;font-size:12px;color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.bank-tag.major{background:var(--gold-light);color:var(--red);font-weight:700;box-shadow:0 2px 8px rgba(212,168,67,0.2)}
 .btn-cta{display:block;width:100%;padding:16px;background:linear-gradient(135deg,var(--red),#E53935);color:#FFF;font-size:17px;font-weight:700;text-align:center;border-radius:14px;text-decoration:none;letter-spacing:1px;box-shadow:0 6px 20px rgba(196,30,36,0.3)}
 .btn-cta:active{transform:scale(0.97)}
 
@@ -196,18 +201,26 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
     <div class="next-date">5月10日</div>
     <div class="next-type">2026年第三期/第四期 储蓄国债（凭证式）</div>
   </div>
-  <p style="text-align:center;font-size:14px;color:var(--sub);margin-bottom:12px">可购买银行</p>
-  <div class="bank-list">
-    <span class="bank-tag">工商银行</span>
-    <span class="bank-tag">建设银行</span>
-    <span class="bank-tag">农业银行</span>
-    <span class="bank-tag">中国银行</span>
-    <span class="bank-tag">交通银行</span>
-    <span class="bank-tag">邮储银行</span>
-    <span class="bank-tag">招商银行</span>
-    <span class="bank-tag">中信银行</span>
-    <span class="bank-tag">光大银行</span>
-    <span class="bank-tag">兴业银行</span>
+        <div class="bank-section">
+          <span class="bank-label">国有商业银行</span>
+          <div class="bank-list">
+            <span class="bank-tag major">工商银行</span>
+            <span class="bank-tag major">建设银行</span>
+            <span class="bank-tag major">农业银行</span>
+            <span class="bank-tag major">中国银行</span>
+            <span class="bank-tag major">交通银行</span>
+            <span class="bank-tag major">邮储银行</span>
+          </div>
+        </div>
+        <div class="bank-section">
+          <span class="bank-label">股份制银行</span>
+          <div class="bank-list">
+            <span class="bank-tag">招商银行</span>
+            <span class="bank-tag">中信银行</span>
+            <span class="bank-tag">光大银行</span>
+            <span class="bank-tag">兴业银行</span>
+          </div>
+        </div>
   </div>
   <p style="text-align:center;font-size:12px;color:var(--red);margin-bottom:20px">
     额度有限，经常"上线秒没"，建议提前联系银行预约
