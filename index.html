@@ -21,10 +21,13 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 .screen{min-height:100vh;padding:32px 20px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
 
 /* ── 第1屏：标题 + 利率对比 ── */
-.screen1{background:linear-gradient(180deg,#0D1B3E 0%,#152350 18%,#1B2D5E 28%,#FFFBF5 58%);position:relative}
+.screen1{background:linear-gradient(180deg,rgba(13,27,62,0.92) 0%,rgba(21,35,80,0.88) 18%,rgba(27,45,94,0.85) 28%,#FFFBF5 58%),url('pboc_building2.jpg') center/cover no-repeat;position:relative}
 .screen1::before{content:'';position:absolute;top:0;left:0;right:0;height:55%;background-image:radial-gradient(circle,rgba(212,168,67,0.12) 1px,transparent 1px);background-size:24px 24px;pointer-events:none}
 .screen1::after{content:'';position:absolute;top:10%;left:5%;width:90%;height:1px;background:linear-gradient(90deg,transparent,rgba(212,168,67,0.3),transparent);pointer-events:none}
 .s1-header{text-align:center;padding-bottom:32px}
+.pboc-logo{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:20px}
+.pboc-emblem{width:48px;height:48px;flex-shrink:0}
+.pboc-name{font-size:14px;color:rgba(255,255,255,0.9);font-weight:700;letter-spacing:2px}
 .s1-header h1{font-size:32px;color:#FFF;font-weight:900;letter-spacing:2px;margin-bottom:8px;text-shadow:0 2px 12px rgba(0,0,0,0.3)}
 .s1-header p{font-size:15px;color:rgba(212,168,67,0.9);letter-spacing:1px}
 
@@ -100,6 +103,17 @@ body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;backgr
 <!-- ══════ 第1屏：利率对比 ══════ -->
 <section class="screen screen1">
   <div class="s1-header">
+    <div class="pboc-logo">
+      <svg class="pboc-emblem" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="512" cy="512" r="450" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="3"/>
+        <circle cx="512" cy="512" r="430" fill="rgba(255,255,255,0.06)"/>
+        <path d="M392.136 500.532l5.896-186.912c0.456-16.332 6.352-27.22 26.764-27.22h25.86V224a12 12 0 0 1 12-12h96.664a12 12 0 0 1 12 12v62.4h25.856c20.864 0 26.308 10.888 26.76 27.22l5.9 186.008-86.188 49.9v-112.056c0-15.424-12.704-27.672-27.672-27.672h-9.072c-15.424 0-27.672 12.704-27.672 27.672v112.964l-87.096-49.904z m244.816 12.904l159.612 98.54c13.98 8.56 20.5 19.088 10.292 36.692l-12.928 22.296 54.268 31.2a12 12 0 0 1 4.768 15.74l-0.368 0.68-48.296 83.292a12 12 0 0 1-16.36 4.384l-54.344-31.24-12.928 22.296c-10.432 17.996-22.624 17.248-37.056 9.472l-164.72-87.92-0.308-99.276 97.46 56.028c13.412 7.716 30.416 2.884 37.904-10.024l4.536-7.824c7.712-13.3 2.788-30.212-10.236-37.7l-98.244-56.48 86.948-50.156z m-249.904 0l-159.612 98.54c-13.98 8.56-20.5 19.088-10.292 36.692l12.928 22.296-54.268 31.2a12 12 0 0 0-4.768 15.74l0.368 0.68 48.296 83.292a12 12 0 0 0 16.36 4.384l54.344-31.24 12.928 22.296c10.432 17.996 22.624 17.248 37.056 9.472l164.72-87.92 0.308-99.276-97.46 56.028c-13.412 7.716-30.416 2.884-37.904-10.024l-4.536-7.824c-7.712-13.3-2.788-30.212 10.236-37.7l98.244-56.48-86.948-50.156z" fill="#D4A843"/>
+      </svg>
+      <div>
+        <span class="pboc-name">中国人民银行</span>
+        <br><span style="font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:1px">THE PEOPLE'S BANK OF CHINA</span>
+      </div>
+    </div>
     <h1>你的钱<br>还能更值钱</h1>
     <p>储蓄国债 vs 银行存款 收益对比</p>
   </div>
