@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>储蓄国债 — 让你的钱更值钱</title>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<style>
+:root {
+  --red: #C41E24;
+  --gold: #D4A843;
+  --gold-light: #F5E6C8;
+  --bg: #FFFBF5;
+  --card: #FFFFFF;
+  --text: #2C2C2C;
+  --sub: #888888;
+  --green: #2E7D32;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.6;max-width:480px;margin:0 auto;overflow-x:hidden}
+.screen{min-height:100vh;padding:32px 20px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+
+/* ── 第1屏：标题 + 利率对比 ── */
+.screen1{background:linear-gradient(180deg,#C41E24 0%,#A0181E 40%,#FFFBF5 40%)}
+.s1-header{text-align:center;padding-bottom:32px}
+.s1-header h1{font-size:32px;color:#FFF;font-weight:900;letter-spacing:2px;margin-bottom:8px}
+.s1-header p{font-size:15px;color:rgba(255,255,255,0.85)}
+
+.rate-cards{display:flex;gap:12px}
+.rate-card{flex:1;background:var(--card);border-radius:16px;padding:20px 16px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.08);position:relative}
+.rate-card.national{border:2px solid var(--gold)}
+.rate-card .label{font-size:13px;color:var(--sub);margin-bottom:4px}
+.rate-card .rate{font-size:36px;font-weight:900}
+.rate-card.national .rate{color:var(--red)}
+.rate-card.bank .rate{color:var(--sub)}
+.rate-card .term{font-size:12px;color:var(--sub);margin-top:4px}
+.rate-card .badge{position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:var(--gold);color:#FFF;font-size:11px;padding:2px 12px;border-radius:10px;white-space:nowrap}
+
+.diff-tag{text-align:center;margin-top:20px;background:var(--gold-light);border-radius:12px;padding:12px 20px}
+.diff-tag .more{font-size:28px;font-weight:900;color:var(--red)}
+.diff-tag .desc{font-size:13px;color:var(--text)}
+
+.scroll-hint{text-align:center;margin-top:24px;color:#FFF;font-size:12px;animation:bounce 1.5s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
+
+/* ── 第2屏：收益计算器 ── */
+.calc-box{background:var(--card);border-radius:20px;padding:24px 20px;box-shadow:0 4px 24px rgba(0,0,0,0.06)}
+.calc-box h2{font-size:20px;text-align:center;margin-bottom:20px;color:var(--red)}
+.input-row{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.input-row label{font-size:14px;white-space:nowrap;font-weight:600}
+.input-row input{flex:1;font-size:20px;padding:10px 14px;border:2px solid #E0E0E0;border-radius:10px;text-align:center;outline:none;font-weight:700}
+.input-row input:focus{border-color:var(--gold)}
+.term-tabs{display:flex;gap:10px;margin-bottom:20px}
+.term-tab{flex:1;padding:10px;text-align:center;border-radius:10px;border:2px solid #E0E0E0;font-size:15px;font-weight:600;cursor:pointer;background:#FFF;transition:all 0.2s}
+.term-tab.active{background:var(--red);color:#FFF;border-color:var(--red)}
+.result-box{display:flex;gap:12px}
+.result-col{flex:1;background:#F8F8F8;border-radius:14px;padding:16px 12px;text-align:center}
+.result-col.national{background:linear-gradient(135deg,#FFF9E6,#F5E6C8)}
+.result-col .r-label{font-size:12px;color:var(--sub);margin-bottom:6px}
+.result-col .r-amount{font-size:22px;font-weight:900;color:var(--text)}
+.result-col.national .r-amount{color:var(--red)}
+.result-col .r-rate{font-size:11px;color:var(--sub);margin-top:4px}
+.diff-box{text-align:center;margin-top:16px;padding:14px;background:var(--red);border-radius:12px}
+.diff-box .diff-text{color:#FFF;font-size:14px}
+.diff-box .diff-num{color:#FFD54F;font-size:24px;font-weight:900}
+
+/* ── 第3屏：风险对比 ── */
+.screen3 h2{font-size:20px;text-align:center;color:var(--red);margin-bottom:8px}
+.screen3 .subtitle{text-align:center;font-size:13px;color:var(--sub);margin-bottom:16px}
+#riskChart{width:100%;height:340px}
+.advantage-list{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.adv-item{background:var(--card);border-radius:12px;padding:14px;box-shadow:0 2px 12px rgba(0,0,0,0.04)}
+.adv-item .adv-icon{font-size:24px;margin-bottom:4px}
+.adv-item .adv-title{font-size:13px;font-weight:700;color:var(--red);margin-bottom:2px}
+.adv-item .adv-desc{font-size:11px;color:var(--sub);line-height:1.5}
+
+/* ── 第4屏：购买指南 ── */
+.screen4{background:linear-gradient(180deg,var(--bg) 0%,var(--gold-light) 100%)}
+.screen4 h2{font-size:20px;text-align:center;color:var(--red);margin-bottom:20px}
+.issue-card{background:var(--card);border-radius:16px;padding:20px;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,0.06);margin-bottom:16px;border:2px solid var(--gold)}
+.issue-card .next-date{font-size:36px;font-weight:900;color:var(--red)}
+.issue-card .next-label{font-size:13px;color:var(--sub);margin-bottom:6px}
+.issue-card .next-type{font-size:14px;color:var(--text);margin-top:4px}
+.bank-list{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:20px}
+.bank-tag{background:var(--card);padding:8px 14px;border-radius:20px;font-size:12px;color:var(--text);box-shadow:0 2px 8px rgba(0,0,0,0.04)}
+.btn-cta{display:block;width:100%;padding:16px;background:linear-gradient(135deg,var(--red),#E53935);color:#FFF;font-size:17px;font-weight:700;text-align:center;border-radius:14px;text-decoration:none;letter-spacing:1px;box-shadow:0 6px 20px rgba(196,30,36,0.3)}
+.btn-cta:active{transform:scale(0.97)}
+
+.footer{text-align:center;padding:24px 20px;font-size:11px;color:var(--sub)}
+.footer .update{color:#999}
+</style>
+</head>
+<body>
+
+<!-- ══════ 第1屏：利率对比 ══════ -->
+<section class="screen screen1">
+  <div class="s1-header">
+    <h1>你的钱<br>还能更值钱</h1>
+    <p>储蓄国债 vs 银行存款 收益对比</p>
+  </div>
+  <div class="rate-cards" id="rateCards">
+    <div class="rate-card national">
+      <div class="badge">国家信用</div>
+      <div class="label">储蓄国债·3年期</div>
+      <div class="rate">1.63%</div>
+      <div class="term">每年付息，到期还本</div>
+    </div>
+    <div class="rate-card bank">
+      <div class="label">银行定存·3年期</div>
+      <div class="rate">1.25%</div>
+      <div class="term">到期一次性还本付息</div>
+    </div>
+  </div>
+  <div style="display:flex;gap:12px;margin-top:12px">
+    <div class="rate-card national" style="border:2px solid var(--gold)">
+      <div class="badge">国家信用</div>
+      <div class="label">储蓄国债·5年期</div>
+      <div class="rate">1.70%</div>
+      <div class="term">每年付息，到期还本</div>
+    </div>
+    <div class="rate-card bank">
+      <div class="label">银行定存·5年期</div>
+      <div class="rate">1.30%</div>
+      <div class="term">到期一次性还本付息</div>
+    </div>
+  </div>
+  <div class="diff-tag">
+    <div class="more">收益高出 30%+</div>
+    <div class="desc">10万元买5年期，比存款多赚 <b>2,000元</b></div>
+  </div>
+  <div class="scroll-hint">▼ 下滑查看收益计算器 ▼</div>
+</section>
+
+<!-- ══════ 第2屏：收益计算器 ══════ -->
+<section class="screen">
+  <div class="calc-box">
+    <h2>算一算，你能多赚多少</h2>
+    <div class="input-row">
+      <label>投资金额</label>
+      <input type="number" id="amount" value="100000" min="1000" step="1000">
+      <label>元</label>
+    </div>
+    <div class="term-tabs" id="termTabs">
+      <div class="term-tab active" data-term="3">3 年期</div>
+      <div class="term-tab" data-term="5">5 年期</div>
+    </div>
+    <div class="result-box">
+      <div class="result-col national" id="colBond">
+        <div class="r-label">储蓄国债到期收益</div>
+        <div class="r-amount" id="bondIncome">¥4,890</div>
+        <div class="r-rate" id="bondRate">年利率 1.63%</div>
+      </div>
+      <div class="result-col" id="colDeposit">
+        <div class="r-label">银行定存到期收益</div>
+        <div class="r-amount" id="depositIncome">¥3,750</div>
+        <div class="r-rate" id="depositRate">年利率 1.25%</div>
+      </div>
+    </div>
+    <div class="diff-box">
+      <div class="diff-text">买国债多赚</div>
+      <div class="diff-num" id="diffAmount">+ ¥1,140</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ 第3屏：风险对比 ══════ -->
+<section class="screen screen3">
+  <h2>风险最低，安全有保障</h2>
+  <p class="subtitle">主流理财产品风险收益对比</p>
+  <div id="riskChart"></div>
+  <div class="advantage-list">
+    <div class="adv-item">
+      <div class="adv-icon">国家信用背书</div>
+      <div class="adv-desc">财政部发行，国家主权信用，零违约风险</div>
+    </div>
+    <div class="adv-item">
+      <div class="adv-icon">收益稳定</div>
+      <div class="adv-desc">固定票面利率，不受市场利率波动影响</div>
+    </div>
+    <div class="adv-item">
+      <div class="adv-icon">免利息税</div>
+      <div class="adv-desc">国债利息收入免征个人所得税</div>
+    </div>
+    <div class="adv-item">
+      <div class="adv-icon">可提前兑取</div>
+      <div class="adv-desc">持有满6个月后可提前兑取，靠档计息</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════ 第4屏：购买指南 ══════ -->
+<section class="screen screen4">
+  <h2>下一期国债发行</h2>
+  <div class="issue-card">
+    <div class="next-label">发行日期</div>
+    <div class="next-date">5月10日</div>
+    <div class="next-type">2026年第三期/第四期 储蓄国债（凭证式）</div>
+  </div>
+  <p style="text-align:center;font-size:14px;color:var(--sub);margin-bottom:12px">可购买银行</p>
+  <div class="bank-list">
+    <span class="bank-tag">工商银行</span>
+    <span class="bank-tag">建设银行</span>
+    <span class="bank-tag">农业银行</span>
+    <span class="bank-tag">中国银行</span>
+    <span class="bank-tag">交通银行</span>
+    <span class="bank-tag">邮储银行</span>
+    <span class="bank-tag">招商银行</span>
+    <span class="bank-tag">中信银行</span>
+    <span class="bank-tag">光大银行</span>
+    <span class="bank-tag">兴业银行</span>
+  </div>
+  <p style="text-align:center;font-size:12px;color:var(--red);margin-bottom:20px">
+    额度有限，经常"上线秒没"，建议提前联系银行预约
+  </p>
+  <a class="btn-cta" href="javascript:void(0)" onclick="alert('请携带身份证前往附近银行网点咨询购买。\n\n建议提前联系银行客户经理预约额度。')">联系附近银行咨询</a>
+</section>
+
+<div class="footer">
+  <p>数据来源：财政部国库司、中国人民银行、各商业银行官网</p>
+  <p class="update" id="updateTime">数据更新：2026年4月</p>
+</div>
+
+<!-- ══════ 脚本 ══════ -->
+<script>
+// ── 运行时常量 ──
+var DATA = {
+  bond: { 3: 0.0163, 5: 0.0170 },
+  deposit: { 3: 0.0125, 5: 0.0130 }
+};
+
+// ── 第2屏：期限切换 ──
+document.getElementById('termTabs').addEventListener('click', function(e) {
+  var tab = e.target.closest('.term-tab');
+  if (!tab) return;
+  this.querySelectorAll('.term-tab').forEach(function(t){t.classList.remove('active')});
+  tab.classList.add('active');
+  calc();
+});
+
+// ── 金额输入 ──
+document.getElementById('amount').addEventListener('input', calc);
+
+function calc() {
+  var amount = parseFloat(document.getElementById('amount').value) || 100000;
+  var term = parseInt(document.querySelector('.term-tab.active').dataset.term);
+  var bondRate = DATA.bond[term];
+  var depRate = DATA.deposit[term];
+
+  var bondIncome = Math.round(amount * bondRate * term);
+  var depIncome = Math.round(amount * depRate * term);
+  var diff = bondIncome - depIncome;
+
+  document.getElementById('bondIncome').textContent = '¥' + bondIncome.toLocaleString();
+  document.getElementById('depositIncome').textContent = '¥' + depIncome.toLocaleString();
+  document.getElementById('bondRate').textContent = '年利率 ' + (bondRate*100).toFixed(2) + '%';
+  document.getElementById('depositRate').textContent = '年利率 ' + (depRate*100).toFixed(2) + '%';
+  document.getElementById('diffAmount').textContent = '+ ¥' + diff.toLocaleString();
+
+  // 动画效果
+  var diffBox = document.querySelector('.diff-box');
+  diffBox.style.transform = 'scale(1.03)';
+  setTimeout(function(){ diffBox.style.transform = 'scale(1)'; }, 150);
+}
+
+// ── 第3屏：ECharts 风险对比图表 ──
+(function() {
+  var chartDom = document.getElementById('riskChart');
+  var chart = echarts.init(chartDom);
+
+  // 产品维度评分：安全性高=高分，风险维度低=好
+  var categories = ['本金安全性', '收益稳定性', '流动性', '收益水平'];
+  var products = {
+    '储蓄国债':    { name:'储蓄国债',   safety:95, stability:95, liquidity:65, yield:45 },
+    '银行定期存款': { name:'银行定存',   safety:92, stability:92, liquidity:30, yield:40 },
+    '货币基金':    { name:'货币基金',   safety:70, stability:80, liquidity:90, yield:38 },
+    '银行理财':    { name:'银行理财',   safety:60, stability:65, liquidity:55, yield:55 },
+    '债券基金':    { name:'债券基金',   safety:45, stability:50, liquidity:75, yield:65 },
+    '股票基金':    { name:'股票基金',   safety:15, stability:20, liquidity:80, yield:85 }
+  };
+
+  var option = {
+    tooltip: { trigger: 'axis' },
+    legend: {
+      data: ['储蓄国债','银行定存','货币基金','银行理财','债券基金','股票基金'],
+      bottom: 0,
+      textStyle: { fontSize: 10 },
+      itemWidth: 10,
+      itemHeight: 10
+    },
+    grid: { left: 60, right: 20, top: 10, bottom: 60 },
+    xAxis: {
+      type: 'category',
+      data: categories,
+      axisLabel: { fontSize: 11, color: '#555' }
+    },
+    yAxis: {
+      type: 'value',
+      max: 100,
+      axisLabel: { fontSize: 10, formatter: '{value}分' },
+      splitLine: { lineStyle: { type: 'dashed', color: '#E8E8E8' } }
+    },
+    series: Object.values(products).map(function(p) {
+      var highlight = p.name === '储蓄国债';
+      return {
+        name: p.name,
+        type: 'bar',
+        data: [p.safety, p.stability, p.liquidity, p.yield],
+        itemStyle: {
+          borderRadius: highlight ? 6 : 4,
+          color: highlight
+            ? new echarts.graphic.LinearGradient(0,0,0,1,[
+                {offset:0,color:'#C41E24'},{offset:1,color:'#E57373'}
+              ])
+            : '#D0D0D0'
+        },
+        barWidth: highlight ? '18%' : '12%',
+        emphasis: { itemStyle: { color: highlight ? '#C41E24' : '#999' } }
+      };
+    })
+  };
+  chart.setOption(option);
+  window.addEventListener('resize', function(){ chart.resize(); });
+})();
+
+// ── 页面加载 ──
+calc();
+document.getElementById('updateTime').textContent =
+  '数据更新：2026年4月（来源：财政部、央行、五大行官网）';
+</script>
+</body>
+</html>
