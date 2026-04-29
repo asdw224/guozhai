@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>国债电子宣传页 - 二维码</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #C41E24 0%, #8B0000 30%, #D4A843 70%, #F5E6C8 100%);
+    font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  }
+
+  .card {
+    background: #FFFFFF;
+    border-radius: 24px;
+    padding: 48px 40px 36px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 0 1px rgba(212,168,67,0.3);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* 顶部装饰条 */
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, #C41E24, #D4A843, #C41E24);
+    border-radius: 24px 24px 0 0;
+  }
+
+  /* 装饰角标 */
+  .card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 6px;
+    background: linear-gradient(90deg, #D4A843, #C41E24, #D4A843);
+    border-radius: 0 0 24px 24px;
+  }
+
+  .qr-wrapper {
+    display: inline-block;
+    padding: 16px;
+    background: #FFFBF0;
+    border: 3px solid #D4A843;
+    border-radius: 16px;
+    position: relative;
+  }
+
+  /* 四角装饰 */
+  .qr-wrapper::before {
+    content: '';
+    position: absolute;
+    top: -2px; left: -2px;
+    width: 24px; height: 24px;
+    border-top: 4px solid #C41E24;
+    border-left: 4px solid #C41E24;
+    border-radius: 4px 0 0 0;
+  }
+
+  .qr-wrapper::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; right: -2px;
+    width: 24px; height: 24px;
+    border-bottom: 4px solid #C41E24;
+    border-right: 4px solid #C41E24;
+    border-radius: 0 0 4px 0;
+  }
+
+  .qr-wrapper img {
+    display: block;
+    width: 280px;
+    height: 280px;
+  }
+
+  .title {
+    margin-top: 24px;
+    font-size: 17px;
+    font-weight: 600;
+    color: #C41E24;
+    letter-spacing: 2px;
+  }
+
+  .title span {
+    display: inline-block;
+    padding: 4px 16px;
+    background: linear-gradient(90deg, #FFF5F5, #FFFBF0, #FFF5F5);
+    border: 1px solid #E8D5A0;
+    border-radius: 20px;
+  }
+
+  .subtitle {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #999;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="qr-wrapper">
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=https://asdw224.github.io/guozhai/&bgcolor=FFFBF0&color=C41E24&margin=10" alt="二维码" />
+  </div>
+  <div class="title"><span>国债电子宣传页</span></div>
+  <div class="subtitle">微信扫码 · 立即查看</div>
+</div>
+</body>
+</html>
